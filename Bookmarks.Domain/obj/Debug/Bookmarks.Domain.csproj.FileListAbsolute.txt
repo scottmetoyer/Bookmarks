@@ -1,0 +1,5 @@
+C:\Code\Bookmarks\Bookmarks.Domain\bin\Debug\Bookmarks.Domain.dll
+C:\Code\Bookmarks\Bookmarks.Domain\bin\Debug\Bookmarks.Domain.pdb
+C:\Code\Bookmarks\Bookmarks.Domain\obj\Debug\ResolveAssemblyReference.cache
+C:\Code\Bookmarks\Bookmarks.Domain\obj\Debug\Bookmarks.Domain.dll
+C:\Code\Bookmarks\Bookmarks.Domain\obj\Debug\Bookmarks.Domain.pdb

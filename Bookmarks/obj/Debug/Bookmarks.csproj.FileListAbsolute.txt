@@ -1,0 +1,8 @@
+C:\Code\Bookmarks\Bookmarks\bin\Bookmarks.dll
+C:\Code\Bookmarks\Bookmarks\bin\Bookmarks.pdb
+C:\Code\Bookmarks\Bookmarks\bin\Bookmarks.Domain.dll
+C:\Code\Bookmarks\Bookmarks\bin\Ninject.dll
+C:\Code\Bookmarks\Bookmarks\bin\Bookmarks.Domain.pdb
+C:\Code\Bookmarks\Bookmarks\obj\Debug\ResolveAssemblyReference.cache
+C:\Code\Bookmarks\Bookmarks\obj\Debug\Bookmarks.dll
+C:\Code\Bookmarks\Bookmarks\obj\Debug\Bookmarks.pdb

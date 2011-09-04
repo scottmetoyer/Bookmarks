@@ -1,0 +1,12 @@
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\Bookmarks.UnitTests.dll
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\Bookmarks.UnitTests.pdb
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\Bookmarks.dll
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\Bookmarks.Domain.dll
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\Moq.dll
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\nunit.framework.dll
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\Bookmarks.Domain.pdb
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\Bookmarks.pdb
+C:\Code\Bookmarks\Bookmarks.UnitTests\obj\Debug\ResolveAssemblyReference.cache
+C:\Code\Bookmarks\Bookmarks.UnitTests\obj\Debug\Bookmarks.UnitTests.dll
+C:\Code\Bookmarks\Bookmarks.UnitTests\obj\Debug\Bookmarks.UnitTests.pdb
+C:\Code\Bookmarks\Bookmarks.UnitTests\bin\Debug\Ninject.dll

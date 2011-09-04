@@ -1,0 +1,14 @@
+﻿{
+	"name":		"Bookmarks",
+	"version":	"1.0",
+	"description": "Bookmark manager",
+	"browser_action": {
+		"default_icon":	"icon.png",
+		"popup":		"popup.html"
+	},	
+	"permissions": [
+		"tabs",
+		"http://scottmetoyer.com/"
+	],
+	"options_page": "options.html"
+}

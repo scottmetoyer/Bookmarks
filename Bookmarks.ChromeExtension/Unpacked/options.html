@@ -1,0 +1,42 @@
+﻿<html>
+<head>
+    <title>Bookmarks Options</title>
+</head>
+<script type="text/javascript">
+    function save_options() {
+        // Make the ajax call to retrieve a token for these credentials
+        var address = "http://scottmetoyer.com/Bookmarks/Account/Authenticate?";
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var params = "email=" + escape(email) + "&password=" + escape(password);
+        var http = new XMLHttpRequest();
+        http.open("GET", address + params, true);
+
+        //Send the proper header information along with the request
+        http.onreadystatechange = function () {
+            if (http.readyState == 4) {
+                if (http.responseText == "unauthorized") {
+                    localStorage["bookmarks_token"] = "";
+                    alert("Incorrect username or password.");
+                }
+                else {
+                    localStorage["bookmarks_token"] = http.responseText;
+                    alert("User authorized!");
+                }
+            }
+        }
+
+        http.send(params);     
+    }
+</script>
+<body>
+    Email:
+    <input type="text" id="email" />
+    <br />
+    Password
+    <input type="password" id="password" />
+    <br />
+    <button onclick="save_options()">
+        Update Credentials</button>
+</body>
+</html>

@@ -1,0 +1,107 @@
+﻿<style type="text/css">
+    body
+    {
+        min-width: 357px;
+        overflow-x: hidden;
+    }
+</style>
+<script type="text/javascript">
+    function initialize() {
+        // Check for stored token
+        var token = localStorage["bookmarks_token"];
+
+        // Redirect to options page if there is no stored token
+        if (!token) {
+            chrome.tabs.create({ url: chrome.extension.getURL('options.html') });
+            window.close();
+            return;
+        }
+
+        // Populate the name and url textboxes from the current page
+        chrome.tabs.getSelected(null, function (tab) {
+            document.getElementById('name').value = tab.title;
+            document.getElementById('url').value = tab.url;
+        });
+    }
+
+    function isValid(url, name, tags, token) {
+        var result = true;
+
+        if (!token) {
+            alert("Invalid token.  Please check your entries on the options page.");
+        }
+
+        return result;
+    }
+
+    function saveBookmark() {
+        // Make the AJAX call to save the bookmark
+        var url = document.getElementById('url').value;
+        var name = document.getElementById('name').value;
+        var tags = document.getElementById('tags').value;
+        var token = localStorage["bookmarks_token"];
+
+        // Make sure that all the required fields are valid for submission
+        if (isValid(url, name, tags, token) == true) {
+            var address = "http://scottmetoyer.com/Bookmarks/New";
+            var params = "url=" + escape(url) + "&name=" + escape(name) + "&tags=" + escape(tags) + "&token=" + escape(token);
+            var http = new XMLHttpRequest();
+            http.open("POST", address, true);
+
+            //Send the proper header information along with the request
+            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            http.setRequestHeader("Content-length", params.length);
+            http.setRequestHeader("Connection", "close");
+
+            http.onreadystatechange = function () {
+                if (http.readyState == 4) {
+                    if (http.responseText == "unauthorized") {
+                        // Invalid token, redirect to login
+                        alert("Invalid token.  Please check your entries on the options page.");
+                    }
+                    else {
+                        window.close();
+                    }
+                }
+            }
+
+            http.send(params);
+        }
+        else {
+            alert("Please check your entries and try again.");
+        }
+    }
+</script>
+<body onload="initialize()">
+    <table>
+        <tr>
+            <td>
+                Name
+            </td>
+            <td>
+                <input type="text" name="name" id="name" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                URL
+            </td>
+            <td>
+                <input type="text" name="url" id="url" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Tags
+            </td>
+            <td>
+                <input type="text" name="tags" id="tags" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="Save bookmark" id="btnSave" onclick="saveBookmark()" />
+            </td>
+        </tr>
+    </table>
+</body>
