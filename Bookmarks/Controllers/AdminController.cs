@@ -75,7 +75,7 @@ namespace Bookmarks.Controllers
 
             if (ModelState.IsValid)
             {
-                bookmark.UserID = user.UserID;
+                bookmark.UserID = user.UserId;
                 _bookmarkRepository.SaveBookmark(bookmark);
 
                 // Clear out the old tags

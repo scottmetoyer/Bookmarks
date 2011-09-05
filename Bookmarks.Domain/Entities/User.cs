@@ -10,7 +10,7 @@ namespace Bookmarks.Domain.Entities
     public class User
     {
         [Column(IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.OnInsert)]
-        public int UserID { get; set; }
+        public int UserId { get; set; }
 
         [Column]
         public string Email { get; set; }

@@ -20,7 +20,7 @@ namespace Bookmarks.UnitTests
         {
             // Arrange
             IAccountRepository repository = UnitTestHelpers.MockAccountRepository(
-                new User { Email = "test@test.com", Password = "test", Token = "12345", UserID = 0 }
+                new User { Email = "test@test.com", Password = "test", Token = "12345", UserId = 0 }
                 );
             AccountController controller = new AccountController(
                 new BookmarksMembershipProvider(repository)
@@ -38,7 +38,7 @@ namespace Bookmarks.UnitTests
         {
             // Arrange
             IAccountRepository repository = UnitTestHelpers.MockAccountRepository(
-                new User { Email = "test@test.com", Password = "test", Token = "12345", UserID = 0 }
+                new User { Email = "test@test.com", Password = "test", Token = "12345", UserId = 0 }
             );
             AccountController controller = new AccountController(
                 new BookmarksMembershipProvider(repository)
@@ -56,7 +56,7 @@ namespace Bookmarks.UnitTests
         {
             // Arrange
             IAccountRepository repository = UnitTestHelpers.MockAccountRepository(
-                  new User { Email = "test@test.com", Password = "test", Token = "12345", UserID = 0 }
+                  new User { Email = "test@test.com", Password = "test", Token = "12345", UserId = 0 }
             );
             AccountController controller = new AccountController(
                 new BookmarksMembershipProvider(repository)
@@ -74,7 +74,7 @@ namespace Bookmarks.UnitTests
         {
             // Arrange
             IAccountRepository repository = UnitTestHelpers.MockAccountRepository(
-     new User { Email = "notoken@test.com", Password = "test", UserID = 0 }
+     new User { Email = "notoken@test.com", Password = "test", UserId = 0 }
  );
             AccountController controller = new AccountController(
                 new BookmarksMembershipProvider(repository)

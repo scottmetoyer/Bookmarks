@@ -21,7 +21,7 @@ namespace Bookmarks.Domain.Concrete
 
         public void SaveUser(User user)
         {
-            if (user.UserID == 0)
+            if (user.UserId == 0)
             {
                 _usersTable.InsertOnSubmit(user);
             }
