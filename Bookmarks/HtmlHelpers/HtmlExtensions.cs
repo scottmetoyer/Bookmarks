@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Bookmarks.HtmlHelpers
 {
-    public static class PagingHelpers
+    public static class HtmlExtensions
     {
         public static MvcHtmlString PageLinks(this HtmlHelper html, PagingInfo pagingInfo, Func<int, string> pageUrl)
         {

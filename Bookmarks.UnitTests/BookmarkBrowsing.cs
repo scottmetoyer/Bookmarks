@@ -33,8 +33,8 @@ namespace Bookmarks.UnitTests
             // Assert
             var displayedBookmarks = ((BookmarksListViewModel)result.ViewData.Model).Bookmarks;
             displayedBookmarks.Count.ShouldEqual(2);
-            displayedBookmarks[0].Name.ShouldEqual("b4");
-            displayedBookmarks[1].Name.ShouldEqual("b5");
+            displayedBookmarks[0].Bookmark.Name.ShouldEqual("b4");
+            displayedBookmarks[1].Bookmark.Name.ShouldEqual("b5");
         }
 
         [Test]

@@ -1,0 +1,17 @@
+﻿@model Bookmarks.Models.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/SiteLayout.cshtml";
+}
+<h2>
+    Log In</h2>
+<p>
+    Please log in to access the administrative area:</p>
+@Html.EnableClientValidation();
+@using (Html.BeginForm())
+{
+    Html.ValidationSummary(true);
+    Html.EditorForModel();
+    <p>
+        <input type="submit" value="Log in" /></p>
+}

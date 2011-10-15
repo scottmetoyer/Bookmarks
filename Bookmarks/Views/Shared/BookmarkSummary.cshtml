@@ -1,0 +1,12 @@
+﻿@model Bookmarks.Models.BookmarkViewModel
+<div class="item">
+    <h4>
+        <a href="@Model.Bookmark.Url %>">
+            @Model.Bookmark.Name</a></h4>
+    <div class="tags">
+        @foreach (var tag in Model.Tags)
+        {
+            <span>@tag.Name,</span>
+        }
+    </div>
+</div>

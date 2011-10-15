@@ -1,0 +1,20 @@
+﻿@model Bookmarks.Models.BookmarksListViewModel
+@using Bookmarks.HtmlHelpers
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/SiteLayout.cshtml";
+}
+<h2>
+    Bookmarks</h2>
+@foreach (var bookmark in Model.Bookmarks)
+{
+    @Html.RenderPartial("BookmarkSummary", bookmark)
+    @Html.ActionLink("Edit", "Edit", new { bookmark.BookmarkID })
+    @Html.ActionLink("Delete", "Delete", new { bookmark.BookmarkID })
+}
+<div class="pager">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+</div>
+<p>
+    @Html.ActionLink("Add a new bookmark", "New")
+</p>

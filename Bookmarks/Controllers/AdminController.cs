@@ -24,24 +24,35 @@ namespace Bookmarks.Controllers
 
         public ViewResult Index([DefaultValue(1)]int page)
         {
-            var bookmarksToShow = _bookmarkRepository.Bookmarks.Skip((page - 1) * PageSize).Take(PageSize).ToList();
+            var bookmarks = _bookmarkRepository.Bookmarks.Skip((page - 1) * PageSize).Take(PageSize).ToList();
+            var bookmarkList = new BookmarksListViewModel();
 
-            var viewModel = new BookmarksListViewModel
+            // Build the viewmodel for each bookmark
+            foreach (Bookmark bookmark in bookmarks)
             {
-                Bookmarks = bookmarksToShow,
-                PagingInfo = new PagingInfo
+                BookmarkViewModel model = new BookmarkViewModel { Bookmark = bookmark };
+                model.Tags = (from t in _bookmarkRepository.Tags
+                              from bt in _bookmarkRepository.BookmarkTags
+                              where bt.TagID == t.TagID &&
+                              bt.BookmarkID == bookmark.BookmarkID
+                              select t).ToList();
+
+                bookmarkList.Bookmarks.Add(model);
+            }
+
+            bookmarkList.PagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
                     TotalItems = _bookmarkRepository.Bookmarks.Count()
-                }
-            };
+                };
 
-            return View(viewModel);
+            return View(bookmarkList);
         }
 
         public ViewResult Edit(int bookmarkID)
         {
+            /*
             var bookmark = _bookmarkRepository.Bookmarks.First(x => x.BookmarkID == bookmarkID);
             var tags = (from tag in _bookmarkRepository.Tags
                         from bookmarkTag in _bookmarkRepository.BookmarkTags
@@ -51,6 +62,8 @@ namespace Bookmarks.Controllers
             var viewModel = new BookmarkViewModel { Bookmark = bookmark, Tags = tags };
 
             return View(viewModel);
+             * */
+            return View();
         }
 
         public RedirectToRouteResult Delete(int bookmarkID)
@@ -70,6 +83,7 @@ namespace Bookmarks.Controllers
         [HttpPost]
         public ActionResult Edit(BookmarkViewModel model, User user)
         {
+            /*
             Bookmark bookmark = model.Bookmark.BookmarkID == 0 ? new Bookmark() : _bookmarkRepository.Bookmarks.First(x => x.BookmarkID == model.Bookmark.BookmarkID);
             TryUpdateModel(bookmark, "Bookmark");
 
@@ -104,6 +118,8 @@ namespace Bookmarks.Controllers
             {
                 return View(model);
             }
+             * */
+            return View();
         }
     }
 }

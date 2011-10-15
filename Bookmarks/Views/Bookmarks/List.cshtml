@@ -1,0 +1,15 @@
+﻿@model Bookmarks.Models.BookmarksListViewModel
+@using Bookmarks.HtmlHelpers
+@{
+    ViewBag.Title = "Bookmarks List";
+    Layout = "~/Views/Shared/SiteLayout.cshtml";
+}
+<h2>
+    Bookmarks</h2>
+@foreach (var bookmark in Model.Bookmarks)
+{
+    Html.RenderPartial("BookmarkSummary", bookmark);
+}
+<div class="pager">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+</div>

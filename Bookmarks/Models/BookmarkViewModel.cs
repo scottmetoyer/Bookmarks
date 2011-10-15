@@ -10,6 +10,6 @@ namespace Bookmarks.Models
     {
         public Bookmark Bookmark { get; set; }
 
-        public string Tags { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }

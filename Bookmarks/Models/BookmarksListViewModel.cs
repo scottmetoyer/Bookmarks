@@ -8,7 +8,7 @@ namespace Bookmarks.Models
 {
     public class BookmarksListViewModel
     {
-        public IList<Bookmark> Bookmarks { get; set; }
+        public List<BookmarkViewModel> Bookmarks { get; set; }
 
         public PagingInfo PagingInfo { get; set; }
     }

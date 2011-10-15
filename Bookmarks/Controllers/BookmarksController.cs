@@ -28,20 +28,30 @@ namespace Bookmarks.Controllers
 
         public ViewResult List([DefaultValue(1)]int page)
         {
-            var bookmarksToShow = _bookmarkRepository.Bookmarks.Skip((page - 1) * PageSize).Take(PageSize).ToList();
+            var bookmarks = _bookmarkRepository.Bookmarks.Skip((page - 1) * PageSize).Take(PageSize).ToList();
+            var bookmarkList = new BookmarksListViewModel { Bookmarks = new List<BookmarkViewModel>() };
 
-            var viewModel = new BookmarksListViewModel
+            // Build the viewmodel for each bookmark
+            foreach (Bookmark bookmark in bookmarks)
             {
-                Bookmarks = bookmarksToShow,
-                PagingInfo = new PagingInfo
-                {
-                    CurrentPage = page,
-                    ItemsPerPage = PageSize,
-                    TotalItems = _bookmarkRepository.Bookmarks.Count()
-                }
+                BookmarkViewModel model = new BookmarkViewModel { Bookmark = bookmark };
+                model.Tags = (from t in _bookmarkRepository.Tags
+                              from bt in _bookmarkRepository.BookmarkTags
+                              where bt.TagID == t.TagID &&
+                              bt.BookmarkID == bookmark.BookmarkID
+                              select t).ToList();
+
+                bookmarkList.Bookmarks.Add(model);
+            }
+
+            bookmarkList.PagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                ItemsPerPage = PageSize,
+                TotalItems = _bookmarkRepository.Bookmarks.Count()
             };
 
-            return View(viewModel);
+            return View(bookmarkList);
         }
 
         public string GetTags(int bookmarkID)

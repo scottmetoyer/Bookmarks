@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/SiteLayout.cshtml";
+}
+<h2>
+    Edit Bookmark</h2>
+@Html.EnableClientValidation()
+@using (Html.BeginForm("Edit", "Admin", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    <h3>
+        Bookmark Details</h3>
+    @Html.HiddenFor(x => x.Bookmark.BookmarkID)
+    @Html.HiddenFor(x => x.Bookmark.UserID)
+
+    <div>
+        Name: @Html.EditorFor(x => x.Bookmark.Name);
+    </div>
+    <div>
+        Url: @Html.EditorFor(x => x.Bookmark.Url)
+    </div>
+    <div>
+        Tags: @Html.EditorFor(x => x.Tags)
+    </div>
+    <p align="center">
+        <input type="submit" value="Save" /></p>
+    @Html.ActionLink("Cancel and return to list", "Index")
+}
