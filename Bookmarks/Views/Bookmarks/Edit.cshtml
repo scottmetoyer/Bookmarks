@@ -1,0 +1,38 @@
+﻿@model Bookmarks.Models.BookmarkViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/SiteLayout.cshtml";
+}
+<h2>
+    Edit Bookmark</h2>
+@{ Html.EnableClientValidation(); }
+@using (Html.BeginForm("Edit", "Bookmarks", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    <h3>
+        Bookmark Details</h3>
+    @Html.HiddenFor(x => x.Bookmark.BookmarkID)
+    @Html.HiddenFor(x => x.Bookmark.UserID)
+
+    <div>
+        Name: @Html.EditorFor(x => x.Bookmark.Name)
+    </div>
+    <div>
+        Url: @Html.EditorFor(x => x.Bookmark.Url)
+    </div>
+    <div>
+        @{
+        string tags = string.Empty;
+
+        foreach (var tag in Model.Tags)
+        {
+            tags += tag.Name + ", ";
+        }
+            
+            <text>Tags: </text><input type="text" value="@tags" name="tags" />
+        }
+    </div>
+    <p align="center">
+        <input type="submit" value="Save" /></p>
+    @Html.ActionLink("Cancel and return to list", "Index")
+}
