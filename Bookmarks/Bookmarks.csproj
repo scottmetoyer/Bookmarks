@@ -71,9 +71,11 @@
     </Compile>
     <Compile Include="HtmlHelpers\HtmlExtensions.cs" />
     <Compile Include="Infrastructure\BookmarksMembershipProvider.cs" />
+    <Compile Include="Infrastructure\CurrentUserModelBinder.cs" />
+    <Compile Include="Infrastructure\FormsAuthenticationWrapper.cs" />
+    <Compile Include="Infrastructure\IFormsAuthentication.cs" />
     <Compile Include="Infrastructure\NinjectControllerFactory.cs" />
     <Compile Include="Infrastructure\StringSplitModelBinder.cs" />
-    <Compile Include="Infrastructure\UserModelBinder.cs" />
     <Compile Include="Models\BookmarksListViewModel.cs" />
     <Compile Include="Models\BookmarkViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />

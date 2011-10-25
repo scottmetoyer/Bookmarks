@@ -44,6 +44,8 @@ namespace Bookmarks.Infrastructure
                    "connectionString",
                    ConfigurationManager.ConnectionStrings["BookmarksConnectionString"].ConnectionString
                    );
+
+            Bind<IFormsAuthentication>().To<FormsAuthenticationWrapper>();
         }
     }
 }

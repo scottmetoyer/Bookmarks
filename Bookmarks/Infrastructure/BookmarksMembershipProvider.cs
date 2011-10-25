@@ -8,53 +8,28 @@ using System.Text;
 using Bookmarks.Domain.Entities;
 using Bookmarks.Domain.Concrete;
 using System.Configuration;
+using Ninject;
 
 namespace Bookmarks.Infrastructure
 {
     public class BookmarksMembershipProvider : MembershipProvider
     {
-        private IAccountRepository _accountRepository;
-
-        public User User { get; private set; }
-
-        public IAccountRepository AccountRepository
-        {
-            get
-            {
-                return _accountRepository;
-            }
-        }
-
-        public BookmarksMembershipProvider()
-            : this(null)
-        {
-        }
-
-        public BookmarksMembershipProvider(IAccountRepository accountRepository)
-            : base()
-        {
-            if (accountRepository == null)
-            {
-                _accountRepository = new SqlAccountRepository(ConfigurationManager.ConnectionStrings["BookmarksConnectionString"].ConnectionString);
-            }
-            else
-            {
-                _accountRepository = accountRepository;
-            }
-        }
+        [Inject]
+        public IAccountRepository AccountRepository { get; set; }
 
         public override bool ValidateUser(string username, string password)
         {
             if (string.IsNullOrEmpty(password.Trim())) return false;
             // string hash = EncryptPassword(password);
 
-            var user = _accountRepository.Users.FirstOrDefault(x => x.Email == username);
+            var user = AccountRepository.Users.FirstOrDefault(x => x.Email == username);
 
             if (user != null)
             {
                 if (user.Password == password)
                 {
-                    this.User = user;
+                    // Save the user to session, is this the best place to do this?
+                    HttpContext.Current.Session["_currentUser"] = user;
                     return true;
                 }
             }

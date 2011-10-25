@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Bookmarks")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Scott Metoyer")]
 [assembly: AssemblyProduct("Bookmarks")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCopyright("Copyright © Scott Metoyer")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

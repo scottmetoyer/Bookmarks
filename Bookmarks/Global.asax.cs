@@ -5,11 +5,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Bookmarks.Infrastructure;
+using Ninject;
+using System.Web.Security;
+using Bookmarks.Domain.Entities;
 
 namespace Bookmarks
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private IKernel _kernel = new StandardKernel(new BookmarksServices());
+
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -78,7 +83,10 @@ namespace Bookmarks
             RegisterRoutes(RouteTable.Routes);
 
             // Register custom model binders
-            ModelBinders.Binders.Add(typeof(string[]), new StringSplitModelBinder());
+            ModelBinders.Binders.Add(typeof(User), new CurrentUserModelBinder());
+
+            // Inject account repository into our custom membership provider
+            _kernel.Inject(Membership.Provider);
         }
     }
 }

@@ -52,12 +52,13 @@ namespace Bookmarks.Controllers
             return View(bookmarkList);
         }
 
-        public ViewResult Edit(int bookmarkID)
+        [Authorize]
+        public ViewResult Edit(int bookmarkID, User currentUser)
         {
             var bookmark = _bookmarkRepository.Bookmarks.FirstOrDefault(x => x.BookmarkID == bookmarkID);
             if (bookmark == null)
             {
-                bookmark = new Bookmark { BookmarkID = 0 };
+                bookmark = new Bookmark { BookmarkID = 0, UserID = currentUser.UserId };
             }
 
             BookmarkViewModel model = new BookmarkViewModel { Bookmark = bookmark };
@@ -70,13 +71,14 @@ namespace Bookmarks.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
-        public ViewResult Edit(Bookmark bookmark, string tags, FormCollection collection)
+        public ActionResult Edit(Bookmark bookmark, string tags, User currentUser)
         {
             var model = _bookmarkRepository.Bookmarks.FirstOrDefault(x => x.BookmarkID == bookmark.BookmarkID);
             if (model == null)
             {
-                model = new Bookmark { BookmarkID = 0 };
+                model = new Bookmark { BookmarkID = 0, UserID = currentUser.UserId };
             }
 
             if (TryUpdateModel(model, "Bookmark"))
@@ -108,12 +110,14 @@ namespace Bookmarks.Controllers
                 _bookmarkRepository.Submit();
             }
 
-            return View(new BookmarkViewModel { Bookmark = bookmark, Tags = tags.ToTagList() });
+            return RedirectToAction("List");
         }
 
-        public ActionResult New()
+        [Authorize]
+        public ActionResult New(User currentUser)
         {
-            return RedirectToAction("Edit", new { bookmarkID = 0 });
+            var model = new BookmarkViewModel { Bookmark = new Bookmark { BookmarkID = 0, UserID = currentUser.UserId }, Tags = new List<Tag>() };
+            return View("Edit", model);
         }
     }
 }

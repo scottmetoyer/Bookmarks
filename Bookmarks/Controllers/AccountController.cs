@@ -14,11 +14,11 @@ namespace Bookmarks.Controllers
 {
     public class AccountController : Controller
     {
-        public BookmarksMembershipProvider _membershipProvider;
+        private IFormsAuthentication _authentication;
 
-        public AccountController(BookmarksMembershipProvider membershipProvider)
+        public AccountController(IFormsAuthentication authentication)
         {
-            _membershipProvider = membershipProvider;
+            _authentication = authentication;
         }
 
         public ViewResult Login()
@@ -31,13 +31,13 @@ namespace Bookmarks.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_membershipProvider.ValidateUser(model.Email, model.Password))
+                if (!_authentication.Authenticate(model.Email, model.Password))
                     ModelState.AddModelError("", "Incorrect username or password");
             }
 
             if (ModelState.IsValid)
             {
-                FormsAuthentication.SetAuthCookie(model.Email, false);
+                _authentication.SetAuthCookie(model.Email, false);
                 return Redirect(returnUrl ?? Url.Action("List", "Bookmarks"));
             }
             else
@@ -48,6 +48,7 @@ namespace Bookmarks.Controllers
 
         public ActionResult Authenticate(string email, string password)
         {
+            /*
             var user = _membershipProvider.AccountRepository.Users.FirstOrDefault(
                 x => x.Email == HttpUtility.UrlDecode(email) &&
                     x.Password == HttpUtility.UrlDecode(password));
@@ -66,6 +67,8 @@ namespace Bookmarks.Controllers
             {
                 return Content("unauthorized");
             }
+             * */
+            return View();
         }
     }
 }
