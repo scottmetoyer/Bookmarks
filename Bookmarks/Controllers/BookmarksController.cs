@@ -71,7 +71,7 @@ namespace Bookmarks.Controllers
         }
 
         [HttpPost]
-        public ViewResult Edit(Bookmark bookmark, string tags)
+        public ViewResult Edit(Bookmark bookmark, string tags, FormCollection collection)
         {
             var model = _bookmarkRepository.Bookmarks.FirstOrDefault(x => x.BookmarkID == bookmark.BookmarkID);
             if (model == null)
@@ -79,7 +79,7 @@ namespace Bookmarks.Controllers
                 model = new Bookmark { BookmarkID = 0 };
             }
 
-            if (TryUpdateModel(model))
+            if (TryUpdateModel(model, "Bookmark"))
             {
                 _bookmarkRepository.SaveBookmark(model);
                 _bookmarkRepository.Submit();
@@ -108,7 +108,7 @@ namespace Bookmarks.Controllers
                 _bookmarkRepository.Submit();
             }
 
-            return View();
+            return View(new BookmarkViewModel { Bookmark = bookmark, Tags = tags.ToTagList() });
         }
 
         public ActionResult New()

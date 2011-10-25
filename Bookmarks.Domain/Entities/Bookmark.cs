@@ -31,5 +31,8 @@ namespace Bookmarks.Domain.Entities
 
         [Column]
         public bool IsPrivate { get; set; }
+
+        [Column]
+        public DateTime CreateDate { get; set; }
     }
 }

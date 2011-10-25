@@ -21,9 +21,16 @@ namespace Bookmarks.Domain.Services
             return result;
         }
 
-        public static List<string> ToTagList(this string commaSeparatedList)
+        public static List<Tag> ToTagList(this string commaSeparatedList)
         {
-            return commaSeparatedList.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).Distinct().ToList();
+            List<Tag> tags = new List<Tag>();
+
+            foreach (string s in commaSeparatedList.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).Distinct().ToList())
+            {
+                tags.Add(new Tag { Name = s.Trim() });
+            }
+
+            return tags;
         }
     }
 }

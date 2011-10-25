@@ -52,6 +52,7 @@ namespace Bookmarks.Domain.Concrete
             if (bookmark.BookmarkID == 0)
             {
                 _bookmarkTable.InsertOnSubmit(bookmark);
+                bookmark.CreateDate = DateTime.Now;
             }
 
             bookmark.Name = bookmark.Name.Trim();
