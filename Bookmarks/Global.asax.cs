@@ -76,6 +76,9 @@ namespace Bookmarks
             AreaRegistration.RegisterAllAreas();
             ControllerBuilder.Current.SetControllerFactory(new NinjectControllerFactory());
             RegisterRoutes(RouteTable.Routes);
+
+            // Register custom model binders
+            ModelBinders.Binders.Add(typeof(string[]), new StringSplitModelBinder());
         }
     }
 }

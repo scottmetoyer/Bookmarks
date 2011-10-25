@@ -75,11 +75,6 @@ namespace Bookmarks.Controllers
             return RedirectToAction("Index");
         }
 
-        public ViewResult New()
-        {
-            return View("Edit", new BookmarkViewModel { Bookmark = new Bookmark { BookmarkID = 0, UserID = 0 } });
-        }
-
         [HttpPost]
         public ActionResult Edit(BookmarkViewModel model, User user)
         {

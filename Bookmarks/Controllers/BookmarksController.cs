@@ -16,14 +16,12 @@ namespace Bookmarks.Controllers
     public class BookmarksController : Controller
     {
         private IBookmarkRepository _bookmarkRepository;
-        private BookmarksMembershipProvider _membershipProvider;
 
         public int PageSize = 25;
 
-        public BookmarksController(IBookmarkRepository bookmarkRepository, BookmarksMembershipProvider membershipProvider)
+        public BookmarksController(IBookmarkRepository bookmarkRepository)
         {
             _bookmarkRepository = bookmarkRepository;
-            _membershipProvider = membershipProvider;
         }
 
         public ViewResult List([DefaultValue(1)]int page)
@@ -54,70 +52,68 @@ namespace Bookmarks.Controllers
             return View(bookmarkList);
         }
 
-        public string GetTags(int bookmarkID)
+        public ViewResult Edit(int bookmarkID)
         {
-            var result = (from tag in _bookmarkRepository.Tags
-                          from bookmarkTag in _bookmarkRepository.BookmarkTags
-                          where (bookmarkTag.TagID == tag.TagID && bookmarkTag.BookmarkID == bookmarkID)
-                          select tag).ToList<Tag>().ToCommaSeparatedString();
+            var bookmark = _bookmarkRepository.Bookmarks.FirstOrDefault(x => x.BookmarkID == bookmarkID);
+            if (bookmark == null)
+            {
+                bookmark = new Bookmark { BookmarkID = 0 };
+            }
 
-            return result;
+            BookmarkViewModel model = new BookmarkViewModel { Bookmark = bookmark };
+            model.Tags = (from t in _bookmarkRepository.Tags
+                          from bt in _bookmarkRepository.BookmarkTags
+                          where bt.TagID == t.TagID &&
+                          bt.BookmarkID == bookmark.BookmarkID
+                          select t).ToList();
+
+            return View(model);
         }
 
-        [ValidateInput(false)]
         [HttpPost]
-        public ActionResult New(string name, string url, string tags, string token)
+        public ViewResult Edit(Bookmark bookmark, string tags)
         {
-            // Authorize user
-            var user = _membershipProvider.AccountRepository.Users.FirstOrDefault(x => x.Token == token);
-            if (user == null)
+            var model = _bookmarkRepository.Bookmarks.FirstOrDefault(x => x.BookmarkID == bookmark.BookmarkID);
+            if (model == null)
             {
-                return Content("unauthorized");
+                model = new Bookmark { BookmarkID = 0 };
             }
 
-            if (_membershipProvider.ValidateUser(user.Email, user.Password))
+            if (TryUpdateModel(model))
             {
-                Bookmark bookmark = _bookmarkRepository.Bookmarks.FirstOrDefault(x => x.Url == Server.UrlDecode(url.Trim()));
+                _bookmarkRepository.SaveBookmark(model);
+                _bookmarkRepository.Submit();
 
-                if (bookmark != null)
+                // Clear  the old tags for this bookmark
+                var oldTags = _bookmarkRepository.BookmarkTags.Where(x => x.BookmarkID == model.BookmarkID);
+                _bookmarkRepository.DeleteBookmarkTags(oldTags);
+
+                // Parse out the new tags
+                string[] bookmarkTags = tags.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+                // Save them
+                foreach (string s in bookmarkTags)
                 {
-                    TryUpdateModel(bookmark);
-                }
-                else
-                {
-                    bookmark = new Bookmark { BookmarkID = 0, IsPrivate = false, Name = Server.UrlDecode(name), Url = Server.UrlDecode(url), Notes = string.Empty, UserID = 0 };
-                }
-
-                if (ModelState.IsValid)
-                {
-                    _bookmarkRepository.SaveBookmark(bookmark);
-
-                    // Clear out the old tags
-                    _bookmarkRepository.ClearBookmarkTags(bookmark.BookmarkID);
-
-                    // Save the tags
-                    foreach (var tagName in Server.UrlDecode(tags).ToTagList())
+                    var tag = _bookmarkRepository.Tags.FirstOrDefault(x => x.Name == s.Trim());
+                    if (tag == null)
                     {
-                        var tag = _bookmarkRepository.Tags.FirstOrDefault(x => x.Name.Trim() == tagName.Trim());
-
-                        if (tag == null)
-                        {
-                            tag = new Tag { Name = tagName, TagID = 0 };
-                        }
-
+                        tag = new Tag { Name = s.Trim(), TagID = 0 };
                         _bookmarkRepository.SaveTag(tag);
-                        _bookmarkRepository.SaveBookmarkTag(
-                                new BookmarkTag { BookmarkID = bookmark.BookmarkID, TagID = tag.TagID }
-                            );
+                        _bookmarkRepository.Submit();
                     }
+
+                    _bookmarkRepository.SaveBookmarkTag(new BookmarkTag { BookmarkID = model.BookmarkID, BookmarkTagID = 0, TagID = tag.TagID });
                 }
-            }
-            else
-            {
-                return Content("unauthorized");
+
+                _bookmarkRepository.Submit();
             }
 
             return View();
+        }
+
+        public ActionResult New()
+        {
+            return RedirectToAction("Edit", new { bookmarkID = 0 });
         }
     }
 }

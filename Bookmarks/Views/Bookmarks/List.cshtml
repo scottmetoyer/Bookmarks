@@ -10,6 +10,7 @@
 {
     Html.RenderPartial("BookmarkSummary", bookmark);
 }
+<a href="@Url.Action("New", "Bookmarks")">Create new bookmark</a>
 <div class="pager">
     @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
 </div>

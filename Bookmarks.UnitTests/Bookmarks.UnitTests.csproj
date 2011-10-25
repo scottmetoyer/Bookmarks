@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BookmarkBrowsing.cs" />
+    <Compile Include="BookmarkEditing.cs" />
     <Compile Include="DisplayingPageLinks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestHelpers.cs" />

@@ -22,10 +22,12 @@ namespace Bookmarks.Domain.Abstract
 
         void DeleteBookmarkTag(BookmarkTag bookmarkTag);
 
-        void ClearBookmarkTags(int bookmarkID);
+        void DeleteBookmarkTags(IEnumerable<BookmarkTag> bookmarkTags);
 
         void SaveTag(Tag tag);
 
         void DeleteTag(Tag tag);
+
+        void Submit();
     }
 }

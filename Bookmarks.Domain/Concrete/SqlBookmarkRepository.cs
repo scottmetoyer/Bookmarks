@@ -10,6 +10,7 @@ namespace Bookmarks.Domain.Concrete
 {
     public class SqlBookmarkRepository : IBookmarkRepository
     {
+        private DataContext _context;
         private Table<Bookmark> _bookmarkTable;
         private Table<BookmarkTag> _bookmarkTagTable;
         private Table<Tag> _tagTable;
@@ -40,10 +41,10 @@ namespace Bookmarks.Domain.Concrete
 
         public SqlBookmarkRepository(string connectionString)
         {
-            DataContext context = new DataContext(connectionString);
-            _bookmarkTable = context.GetTable<Bookmark>();
-            _bookmarkTagTable = context.GetTable<BookmarkTag>();
-            _tagTable = context.GetTable<Tag>();
+            _context = new DataContext(connectionString);
+            _bookmarkTable = _context.GetTable<Bookmark>();
+            _bookmarkTagTable = _context.GetTable<BookmarkTag>();
+            _tagTable = _context.GetTable<Tag>();
         }
 
         public void SaveBookmark(Bookmark bookmark)
@@ -60,40 +61,35 @@ namespace Bookmarks.Domain.Concrete
             {
                 bookmark.Url = "http://" + bookmark.Url;
             }
-
-            _bookmarkTable.Context.SubmitChanges();
         }
 
         public void DeleteBookmark(Bookmark bookmark)
         {
             // Delete the BookmarkTags for this book
-            foreach(var bookmarkTag in _bookmarkTagTable.Where(x => x.BookmarkID == bookmark.BookmarkID))
+            foreach (var bookmarkTag in _bookmarkTagTable.Where(x => x.BookmarkID == bookmark.BookmarkID))
             {
                 _bookmarkTagTable.DeleteOnSubmit(bookmarkTag);
             }
 
             _bookmarkTable.DeleteOnSubmit(bookmark);
-            _bookmarkTable.Context.SubmitChanges();
+            _context.SubmitChanges();
         }
 
         public void SaveBookmarkTag(BookmarkTag bookmarkTag)
         {
             _bookmarkTagTable.InsertOnSubmit(bookmarkTag);
-            _bookmarkTagTable.Context.SubmitChanges();
         }
 
         public void DeleteBookmarkTag(BookmarkTag bookmarkTag)
         {
             _bookmarkTagTable.DeleteOnSubmit(bookmarkTag);
-            _bookmarkTagTable.Context.SubmitChanges();
+            _context.SubmitChanges();
         }
 
-        public void ClearBookmarkTags(int bookmarkID)
+        public void DeleteBookmarkTags(IEnumerable<BookmarkTag> tags)
         {
-            foreach (BookmarkTag bookmarkTag in this.BookmarkTags.Where(x => x.BookmarkID == bookmarkID))
-            {
-                this.DeleteBookmarkTag(bookmarkTag);
-            }
+            _bookmarkTagTable.DeleteAllOnSubmit(tags);
+            _context.SubmitChanges();
         }
 
         public void SaveTag(Tag tag)
@@ -104,14 +100,17 @@ namespace Bookmarks.Domain.Concrete
             }
 
             tag.Name = tag.Name.Trim();
-
-            _tagTable.Context.SubmitChanges();
         }
 
         public void DeleteTag(Tag tag)
         {
             _tagTable.DeleteOnSubmit(tag);
-            _tagTable.Context.SubmitChanges();
+            _context.SubmitChanges();
+        }
+
+        public void Submit()
+        {
+            _context.SubmitChanges();
         }
     }
 }

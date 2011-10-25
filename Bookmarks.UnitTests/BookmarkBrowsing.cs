@@ -7,6 +7,7 @@ using Bookmarks.Domain.Abstract;
 using Bookmarks.Domain.Entities;
 using Bookmarks.Models;
 using Bookmarks.Controllers;
+using Moq;
 
 namespace Bookmarks.UnitTests
 {
@@ -17,14 +18,7 @@ namespace Bookmarks.UnitTests
         public void Can_View_A_Single_Page_Of_Bookmarks()
         {
             // Arrange
-            IBookmarkRepository bookmarkRepository = UnitTestHelpers.MockBookmarkRepository(
-                new Bookmark { Name = "b1" },
-                new Bookmark { Name = "b2" },
-                new Bookmark { Name = "b3" },
-                new Bookmark { Name = "b4" },
-                new Bookmark { Name = "b5" }
-                );
-            var bookmarkController = new BookmarksController(bookmarkRepository, null);
+            var bookmarkController = new BookmarksController(UnitTestHelpers.MockBookmarkRepository());
             bookmarkController.PageSize = 3;
 
             // Act
@@ -38,8 +32,26 @@ namespace Bookmarks.UnitTests
         }
 
         [Test]
+        public void Can_View_Tags_On_Bookmark_List()
+        {
+            // Arrange
+            var bookmarkController = new BookmarksController(UnitTestHelpers.MockBookmarkRepository());
+            bookmarkController.PageSize = 3;
+
+            // Act
+            var result = bookmarkController.List(1);
+
+            // Assert
+            var displayedBookmarks = (BookmarksListViewModel)result.ViewData.Model;
+            displayedBookmarks.Bookmarks.Count.ShouldEqual(3);
+            displayedBookmarks.Bookmarks[2].Tags.Count.ShouldEqual(3);
+            displayedBookmarks.Bookmarks[2].Tags[2].Name.ShouldEqual("t3");
+        }
+
+        [Test]
         public void Can_View_Bookmarks_From_A_Single_Tag()
         {
+
         }
 
         [Test]

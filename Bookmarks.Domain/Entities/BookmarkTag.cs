@@ -10,10 +10,13 @@ namespace Bookmarks.Domain.Entities
     [Table(Name = "BookmarkTags")]
     public class BookmarkTag
     {
-        [Column(Name = "BookmarkID", IsPrimaryKey = true)]
+        [Column(IsPrimaryKey = true, IsDbGenerated = true, AutoSync = AutoSync.OnInsert)]
+        public int BookmarkTagID { get; set; }
+
+        [Column]
         public int BookmarkID { get; set; }
 
-        [Column(Name = "TagID", IsPrimaryKey = true)]
+        [Column]
         public int TagID { get; set; }
     }
 }
